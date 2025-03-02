@@ -13,7 +13,7 @@ Home
         </tr>
         {{range .Snippets}}
         <tr>
-            <th><a href="/snippet/view?id={{.ID}}">{{.Title}}</a></th>
+            <th><a href="/snippet/view/{{.ID}}">{{.Title}}</a></th>
             <th>{{humanDate .Created}}</th>
             <th>#{{.ID}}</th>
         </tr>        
