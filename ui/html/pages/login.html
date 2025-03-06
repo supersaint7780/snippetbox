@@ -1,7 +1,10 @@
-{{define "title"}}Signup{{end}}
+{{define "title"}}Login{{end}}
 
 {{define "main"}}
-<form action="/user/login" method="post">
+<form action="/user/login" method="post" novalidate>
+    {{range .Form.NonFieldErrors}}
+        <div class="error">{{.}}</div>
+    {{end}}
     <div>
         <label for="email">Email:</label>
         {{with .Form.FieldErrors.email}}

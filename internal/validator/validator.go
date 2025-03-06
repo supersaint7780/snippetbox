@@ -2,6 +2,7 @@ package validator
 
 import (
 	"regexp"
+	"slices"
 	"strings"
 	"unicode/utf8"
 )
@@ -9,11 +10,16 @@ import (
 var EmailRx = regexp.MustCompile("^[a-zA-Z0-9.!#$%&'*\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")
 
 type Validator struct {
-	FieldErrors map[string]string
+	FieldErrors    map[string]string
+	NonFieldErrors []string
 }
 
 func (v *Validator) Valid() bool {
-	return len(v.FieldErrors) == 0
+	return len(v.FieldErrors) == 0 && len(v.NonFieldErrors) == 0
+}
+
+func (v *Validator) AddNonFieldError(message string) {
+	v.NonFieldErrors = append(v.NonFieldErrors, message)
 }
 
 func (v *Validator) AddFieldError(key, message string) {
@@ -51,10 +57,5 @@ func Matches(value string, rx *regexp.Regexp) bool {
 }
 
 func PermittedInt(value int, permittedValues ...int) bool {
-	for i := range permittedValues {
-		if value == permittedValues[i] {
-			return true
-		}
-	}
-	return false
+	return slices.Contains(permittedValues, value)
 }
